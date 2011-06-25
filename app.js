@@ -8,6 +8,7 @@ var app = module.exports = express.createServer();
 
 // My stuff
 var players = require('./players');
+var games = require('./games');
 
 // Configuration
 
@@ -17,6 +18,7 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(express.cookieParser());
+  app.use(express.errorHandler());
   app.use(express.session({secret: 'keyboard cat'}));
   app.use(express.compiler({ src: __dirname + '/public', enable: ['sass'] }));
   app.use(app.router);
@@ -31,10 +33,11 @@ app.configure('production', function(){
   app.use(express.errorHandler()); 
 });
 
-// Vars
+// Helpers
 
-var active_games = [];
-var games = {};
+function wrapResponse(response, notifications) {
+  return JSON.stringify([response, notifications]);
+}
 
 // Routes
 
@@ -44,6 +47,7 @@ app.get('/', function(req, res){
   });
 });
 
+// authenticate 
 app.post('/authenticate', function(req, res){
   var token = req.body.token;
   if(!token || !players.getPlayer(token)) {
@@ -52,7 +56,58 @@ app.post('/authenticate', function(req, res){
   
   // send back player
   var player = players.getPlayer(token);
-  res.send(JSON.stringify(player));
+  
+  res.send(wrapResponse(player, player.getNotifications()));
+});
+
+// game handler
+app.all('/game/:token', function(req, res, next){
+  console.log(players);
+  req.player = players.getPlayer(req.params.token);
+  
+  if(req.player)
+    next();
+  else
+    next(new Error('cannot find player ' + req.params.token));
+});
+
+// get a game
+app.get('/game/:id', function(req, res){
+  var game = games.getGame();
+  var player = req.player;
+  var round = game.beginRound(player.token);
+  
+  player.beginRound(round);
+  
+  res.send(wrapResponse(round, player.getNotifications()));
+});
+
+// play handler
+app.all('/play', function(req, res, next){
+  req.player = players.getPlayer(req.body.token);
+  if(!req.player)
+    next(new Error('cannot find player ' + req.body.token));
+
+  req.game = games.getGameById(req.body.id);
+  if(!req.game)
+    next(new Error('cannot find game ' + req.body.id));
+  
+  req.content = req.body.content;
+  if(!req.content)
+    next(new Error('no content was provided in play'));
+
+  next();
+})
+
+// make a play 
+app.post('/play', function(req, res){
+  var player = req.player, game = req.game, round = req.round;
+  
+  game.endRound(round.content);
+  player.endRound();
+  games.putGame(game);
+  
+  res.send(wrapResponse({ message: 'SUCCESS' }, player.getNotifications()));
 });
 
 app.listen(3000);
