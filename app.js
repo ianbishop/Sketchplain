@@ -50,9 +50,11 @@ app.get('/', function(req, res){
 // authenticate 
 app.post('/authenticate', function(req, res){
   var token = req.body.token;
+  console.log(token);
   if(!token || !players.getPlayer(token)) {
     token = players.createPlayer();
   }
+  console.log(token);
   
   // send back player
   var player = players.getPlayer(token);
@@ -62,7 +64,7 @@ app.post('/authenticate', function(req, res){
 
 // game handler
 app.all('/game/:token', function(req, res, next){
-  console.log(players);
+  // console.log(players);
   req.player = players.getPlayer(req.params.token);
   
   if(req.player)
@@ -75,7 +77,7 @@ app.all('/game/:token', function(req, res, next){
 app.get('/game/:id', function(req, res){
   var game = games.getGame();
   var player = req.player;
-  var round = game.beginRound(player.token);
+  var round = game.beginRound(player);
   
   player.beginRound(round);
   
@@ -101,9 +103,9 @@ app.all('/play', function(req, res, next){
 
 // make a play 
 app.post('/play', function(req, res){
-  var player = req.player, game = req.game, round = req.round;
+  var player = req.player, game = req.game, content = req.content;
   
-  game.endRound(round.content);
+  game.endRound(content);
   player.endRound();
   games.putGame(game);
   

@@ -28,7 +28,7 @@ function authenticate(callback) {
           Cookie.createCookie('userToken', player.token, 365);
         
         if(response[1].length > 0)
-          displayNotifications(response.notifications());
+          displayNotifications(response[1]);
         
         callback();
       });
@@ -44,12 +44,37 @@ function displayStartup() {
         game = response[0];
         
         if(response[1].length > 0)
-          displayNotifications(response.notifications());
+          displayNotifications(response[1]);
+          
+        displayRound();
       });
   });
 }
 
 function displayNotifications(notifications) {
   
+}
+
+function displayRound() {
+  $('#round').click(function() {
+    $.post('/play',
+      {
+        token: player.token,
+        id: game.id,
+        content: "Hello World"
+      },
+      function(data) {
+        response = jQuery.parseJSON(data);
+        
+        message = response[0].message;
+        if(message == "SUCCESS") {
+          alert('Yay!');
+          game = null;
+        }
+        
+        if(response[1].length > 0)
+          displayNotifications(response[1])
+      });
+  })
 }
 

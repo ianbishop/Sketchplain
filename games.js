@@ -12,9 +12,8 @@ function Game(id, startSentence) {
   this.startSentence = startSentence;
 }
 
-Game.prototype.beginRound = function(playerToken) {
+Game.prototype.beginRound = function(player) {
   if(!this.roundInProgress) {
-    var roundId = this.rounds.length + 1;
     this.currentType = (this.currentType == 'EXPLAIN') ? 'DRAW' : 'EXPLAIN';
     
     var lastRound;
@@ -24,8 +23,7 @@ Game.prototype.beginRound = function(playerToken) {
       lastRound = this.startSentence;
     
     var round = {
-      token: playerToken,
-      roundId: roundId,
+      player: player,
       type: this.currentType,
       lastRound: lastRound,
       content: null,
@@ -37,7 +35,6 @@ Game.prototype.beginRound = function(playerToken) {
     
     var playerRound =  {
       id: this.id,
-      roundId: roundId,
       type: this.currentType,
       lastRound: lastRound,
       createdAt: round.createdAt
@@ -46,17 +43,17 @@ Game.prototype.beginRound = function(playerToken) {
     return playerRound;
   }
   else
-    console.log('GAME: ' + this.id + ', ROUND: ' + this.rounds[this.rounds.length-1].roundId + ' - Attempted round begin for game with round in progress.');
+    console.log('GAME: ' + this.id + ', ROUND: ' + (this.rounds.length-1) + ' - Attempted round begin for game with round in progress.');
 };
 
 Game.prototype.endRound = function(roundContent) {
   if(this.roundInProgress) {
-    this.rounds[rounds.length - 1].content = roundContent;
+    this.rounds[this.rounds.length - 1].content = roundContent;
     this.roundInProgress = false;
     
     // ok, now check if the game is done
-    if(rounds.length >= 7) {
-      game.finished = true;
+    if(this.rounds.length >= 7) {
+      this.finished = true;
       console.log('GAME: ' + this.id + ' - Has been finished.');
     }
   }
@@ -125,8 +122,7 @@ exports.putGame = function(game) {
     var notification = { id: game.id, image: finalImage };
     var length = game.rounds.length;
     for(var i=0; i < length; i++) {
-      var player = players.getPlayer(game.rounds[i].token);
-      player.notifications.push(notification);
+      game.rounds[i].player.notifications.push(notification);
     }
   }
   else

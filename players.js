@@ -18,7 +18,7 @@ Player.prototype.beginRound = function(round) {
     this.roundInProgress = true;
   }
   else
-    console.log('Player: ' + player.token + ' - Attempted to begin round while round in progress');
+    console.log('Player: ' + this.token + ' - Attempted to begin round while round in progress');
 };
 
 Player.prototype.endRound = function() {
@@ -27,7 +27,7 @@ Player.prototype.endRound = function() {
     this.roundInProgress = false;
   }
   else
-    console.log('Player: ' + player.token + ' - Attempted to end round with no round in progress');
+    console.log('Player: ' + this.token + ' - Attempted to end round with no round in progress');
 };
 
 Player.prototype.getNotifications = function() {
@@ -59,14 +59,14 @@ function tokenInUse(token) {
 exports.createPlayer = function() {
   var token;
   while(tokenInUse(token = generateToken()));
-  console.log(players);
+  //console.log(players);
   players[token] = new Player(token);
-  console.log(players);
+  //console.log(players);
   return token;
 }
 
 exports.getPlayer = function(token) {
-  console.log(players);
+  //console.log(players);
   return players[token];
 }
 
