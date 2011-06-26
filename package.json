@@ -1,10 +1,11 @@
 {
-    "name": "application-name"
+    "name": "Sketchplain"
   , "version": "0.0.1"
   , "private": true
   , "dependencies": {
       "express": "2.3.12"
     , "sass": ">= 0.0.1"
     , "jade": ">= 0.0.1"
+    , "rbytes": ">= 0.0.2"
   }
 }
