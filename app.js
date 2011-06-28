@@ -43,7 +43,8 @@ function wrapResponse(response, notifications) {
 
 app.get('/', function(req, res){
   res.render('index', {
-    title: 'Sketchplain'
+    title: 'Sketchplain',
+    titleSub: 'alpha'
   });
 });
 

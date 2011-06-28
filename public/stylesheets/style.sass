@@ -1,9 +1,54 @@
 body
-  :padding 50px
   :font 14px "Lucida Grande", Helvetica, Arial, sans-serif
 a
   :color #00B7FF
-#surface
-  :width 300px
-  :height 300px
-  :border 2px solid #ccc;
+#container
+  :background-color #f1f1f1
+#header
+  :width 100%
+  :height 50px
+  :background-color #e61a19
+#header h1
+  :color white
+  :float left
+  :position relative
+  :left 50px
+  :bottom 10px
+#header span
+  :color white
+  :float left
+  :position relative
+  :left 50px
+  :top 5px
+  :font-size 0.8em
+#content #topCard, #content #bottomCard
+  :height 75px
+  :width 475px
+  :border-left 1px solid #cccccc  
+  :border-right 1px solid #cccccc
+  :margin 0px auto -1px auto
+#content #topCard
+  :margin-bottom 45px
+  :border-bottom 1px solid #cccccc
+  :background-image -moz-linear-gradient(#cccccc, #ffffff)
+  :background-image -webkit-gradient(linear, 0% 0%, 0% 100%, from(#cccccc), to(#ffffff))
+  :background-image -webkit-linear-gradient(#cccccc, #ffffff)
+  :background-image -o-linear-gradient(#cccccc, #ffffff)
+#content #bottomCard
+  :border-top 1px solid #cccccc
+  :background-color #cccccc
+  :background-image -moz-linear-gradient(#ffffff, #cccccc)
+  :background-image -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ffffff), to(#cccccc))
+  :background-image -webkit-linear-gradient(#ffffff, #cccccc)
+  :background-image -o-linear-gradient(#ffffff, #cccccc)
+#content #mainCard
+  :border 1px solid black
+  :background-color #ffffff
+  :width 475px
+  :height 370px
+  :margin 0px auto -1px auto
+  :margin-bottom 45px
+#footer
+  :width 100%
+  :height 100px
+  :background-color #1c90c1
