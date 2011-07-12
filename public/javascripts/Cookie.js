@@ -1,4 +1,4 @@
-function Cookie() {
+function CookieMonster() {
   var instance = (function() {
     
     return {
@@ -29,9 +29,9 @@ function Cookie() {
     };
   })();
 
-  Cookie = function() {
+  CookieMonster = function() {
     return instance;
   }
 
-  return Cookie();
+  return CookieMonster();
 }
